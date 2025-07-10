@@ -12,6 +12,11 @@ public record ProductDto(
     string CategoryName
 );
 
+public record ProductListDto(
+    IEnumerable<ProductDto> Products,
+    int TotalCount
+);
+
 public record CreateProductDto(
     string Name,
     string Description,

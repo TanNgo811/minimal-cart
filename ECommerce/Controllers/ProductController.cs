@@ -1,5 +1,6 @@
 using ECommerce.DTOs;
 using ECommerce.Interfaces;
+using ECommerce.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +18,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<ProductListDto>>> GetProducts(
+        [FromQuery] ProductFilterDto filter)
     {
-        var products = await _productService.GetAllProductsAsync();
-        return Ok(products);
+        var productListDto = await _productService.GetAllProductsAsync(filter);
+        return Ok(productListDto);
     }
 
     [HttpGet("{id:guid}")]
@@ -58,9 +60,12 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("category/{categoryId:guid}")]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsByCategory(Guid categoryId)
+    public async Task<ActionResult<IEnumerable<ProductListDto>>> GetProductsByCategory(
+        Guid categoryId,
+        [FromQuery] ProductFilterDto filter)
     {
-        var products = await _productService.GetProductsByCategoryAsync(categoryId);
+        var products = await _productService.GetProductsByCategoryAsync(categoryId, filter);
+        
         return Ok(products);
     }
 }
